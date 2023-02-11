@@ -1,0 +1,37 @@
+
+/* cuadrados para simon dice */
+
+body {
+    background-color: #3a3939;
+    margin: 0;
+    padding: 0;
+}
+
+.cuadrado { 
+    width: 100px; 
+    height: 100px; 
+    border: 1px solid black;
+    margin: 10px; 
+    float: left
+}
+
+#color-amarillo {
+    background-color: yellow;
+}
+
+#color-rojo {
+    background-color: red;
+}
+
+#color-verde {
+    background-color: green;
+}
+
+#color-azul {
+    background-color: blue;
+}
+
+.flash {
+    border: 8px solid transparent;
+}
+
