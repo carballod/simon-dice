@@ -1,14 +1,13 @@
 const $botonIniciar = document.querySelector('#boton-iniciar');
-const $verde = document.querySelector('#verde');
-const $rojo = document.querySelector('#rojo');
-const $amarillo = document.querySelector('#amarillo');
-const $azul = document.querySelector('#azul');
+const $verde = document.querySelector('#color-verde');
+const $rojo = document.querySelector('#color-rojo');
+const $amarillo = document.querySelector('#color-amarillo');
+const $azul = document.querySelector('#color-azul');
 const $nivel = document.querySelector('#nivel');
 
 
 $botonIniciar.addEventListener('click', () => {
-    console.log(numeroAleatorio());
-    SecuenciaInicial();
+    console.log(Secuencia());
 });
 
 const Colores = [$verde, $rojo, $amarillo, $azul];
@@ -22,7 +21,10 @@ const numeroAleatorio = function (){
     return $numeroAleatorio;
 };
 
-
+const Secuencia = function (){
+    secuenciaMaquina.push(numeroAleatorio());
+    return secuenciaMaquina;
+};
 
 
 
