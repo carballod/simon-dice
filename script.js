@@ -9,23 +9,26 @@ const colores = [$verde, $rojo, $amarillo, $azul];
 
 const iniciarJuego = function() {
     juegoActivo = true;
+    nivel = 1;
+    $nivel.classList.remove('oculto');
+    $botonIniciar.classList.add('oculto');
     secuenciaRonda();
-    copiarSecuencia();
-    interval = setInterval(compararSecuencia, 1000 * (secuenciaMaquina.length + 1) + 500);
+    secuenciaJugador();
+    interval = setInterval(compararSecuencia, 500 * (secuenciaMaquina.length + 1) + 500);
 };
 
 let secuenciaHumano = [];
 let secuenciaMaquina = [];
-let nivel = 0;
+let nivel = 1;
 let interval;
 let juegoActivo = false;
+$botonIniciar.classList.remove('oculto')
 
 const secuenciaRonda = function (){
     const numeroAleatorio = Math.floor(Math.random() * (colores.length));
-
     secuenciaMaquina.push(numeroAleatorio);
-    nivel++;
     $nivel.innerHTML = `Nivel: ${nivel}`;
+    nivel++;
 
     if(juegoActivo){
         console.log(secuenciaMaquina);
@@ -45,16 +48,16 @@ const mostrarSecuencia = function (){
     }
 };
 
-const copiarSecuencia = function (){
+const secuenciaJugador = function (){
     colores.forEach((color) => {
-        color.addEventListener('click', (event) => {
-            const colorSeleccionado = colores.indexOf(event.target);
-            color.classList.add('flash');
-            setTimeout(() => {
-                color.classList.remove('flash');
-            }, 500);
-            secuenciaHumano.push(colorSeleccionado);
-        });
+            color.addEventListener('click', (event) => {
+                const colorSeleccionado = colores.indexOf(event.target);
+                color.classList.add('flash');
+                setTimeout(() => {
+                    color.classList.remove('flash');
+                }, 500);
+                secuenciaHumano.push(colorSeleccionado);
+            });
     })
 };
 
@@ -66,6 +69,8 @@ const compararSecuencia = function (){
             secuenciaMaquina = [];
             nivel = 0;
             juegoActivo = false;
+            $nivel.classList.add('oculto');
+            $botonIniciar.classList.remove('oculto');
             clearInterval(interval);
             return;
         }
@@ -78,5 +83,7 @@ const compararSecuencia = function (){
         }, 500);
     }
 };
+
+
 
 $botonIniciar.addEventListener('click', iniciarJuego);

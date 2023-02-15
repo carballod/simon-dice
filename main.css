@@ -35,3 +35,6 @@ body {
     border: 8px solid transparent;
 }
 
+.oculto {
+    display: none;
+}	
