@@ -8,6 +8,7 @@ const colores = [$verde, $rojo, $amarillo, $azul];
 
 
 const iniciarJuego = function() {
+    juegoActivo = true;
     secuenciaRonda();
     copiarSecuencia();
     interval = setInterval(compararSecuencia, 1000 * (secuenciaMaquina.length + 1) + 500);
@@ -17,6 +18,7 @@ let secuenciaHumano = [];
 let secuenciaMaquina = [];
 let nivel = 0;
 let interval;
+let juegoActivo = false;
 
 const secuenciaRonda = function (){
     const numeroAleatorio = Math.floor(Math.random() * (colores.length));
@@ -25,8 +27,10 @@ const secuenciaRonda = function (){
     nivel++;
     $nivel.innerHTML = `Nivel: ${nivel}`;
 
-    console.log(secuenciaMaquina);
-    mostrarSecuencia();
+    if(juegoActivo){
+        console.log(secuenciaMaquina);
+        mostrarSecuencia();
+    }
 };
 
 const mostrarSecuencia = function (){
@@ -52,7 +56,7 @@ const copiarSecuencia = function (){
             secuenciaHumano.push(colorSeleccionado);
         });
     })
-}
+};
 
 const compararSecuencia = function (){
     for (let i = 0; i < secuenciaHumano.length; i++) {
@@ -61,6 +65,9 @@ const compararSecuencia = function (){
             secuenciaHumano = [];
             secuenciaMaquina = [];
             nivel = 0;
+            juegoActivo = false;
+            clearInterval(interval);
+            return;
         }
      }
     
