@@ -14,7 +14,7 @@ const iniciarJuego = function() {
     $botonIniciar.classList.add('oculto');
     secuenciaRonda();
     secuenciaJugador();
-    interval = setInterval(compararSecuencia, 500 * (secuenciaMaquina.length + 1) + 500);
+    interval = setInterval(compararSecuencia, 1000 * (secuenciaMaquina.length + 1) + 500);
 };
 
 let secuenciaHumano = [];
@@ -26,7 +26,9 @@ $botonIniciar.classList.remove('oculto')
 
 const secuenciaRonda = function (){
     const numeroAleatorio = Math.floor(Math.random() * (colores.length));
+
     secuenciaMaquina.push(numeroAleatorio);
+    nivel++;
     $nivel.innerHTML = `Nivel: ${nivel}`;
     nivel++;
 
@@ -50,14 +52,14 @@ const mostrarSecuencia = function (){
 
 const secuenciaJugador = function (){
     colores.forEach((color) => {
-            color.addEventListener('click', (event) => {
-                const colorSeleccionado = colores.indexOf(event.target);
-                color.classList.add('flash');
-                setTimeout(() => {
-                    color.classList.remove('flash');
-                }, 500);
-                secuenciaHumano.push(colorSeleccionado);
-            });
+        color.addEventListener('click', (event) => {
+            const colorSeleccionado = colores.indexOf(event.target);
+            color.classList.add('flash');
+            setTimeout(() => {
+                color.classList.remove('flash');
+            }, 500);
+            secuenciaHumano.push(colorSeleccionado);
+        });
     })
 };
 
@@ -68,11 +70,6 @@ const compararSecuencia = function (){
             secuenciaHumano = [];
             secuenciaMaquina = [];
             nivel = 0;
-            juegoActivo = false;
-            $nivel.classList.add('oculto');
-            $botonIniciar.classList.remove('oculto');
-            clearInterval(interval);
-            return;
         }
      }
     
@@ -83,7 +80,5 @@ const compararSecuencia = function (){
         }, 500);
     }
 };
-
-
 
 $botonIniciar.addEventListener('click', iniciarJuego);
