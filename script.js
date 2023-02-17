@@ -6,18 +6,19 @@ const $azul = document.querySelector('#color-azul');
 const $nivel = document.querySelector('#nivel');
 const colores = [$verde, $rojo, $amarillo, $azul];
 
+let secuenciaHumano = [];
+let secuenciaMaquina = [];
+let nivel = 0;
+let juegoActivo = false;
 
 const iniciarJuego = function() {
+    juegoActivo = true;
+    secuenciaHumano = [];
+    secuenciaMaquina = [];
     nivel = 1;
     secuenciaRonda();
     secuenciaJugador();
 };
-
-let secuenciaHumano = [];
-let secuenciaMaquina = [];
-let nivel;
-let interval;
-$botonIniciar.classList.remove('oculto')
 
 const actualizarNivel = function () {
     $nivel.innerHTML = `Nivel: ${nivel}`;
@@ -30,22 +31,24 @@ const actualizarTurno = function (turno) {
 
 const secuenciaRonda = function (){
     actualizarTurno('Turno de la maquina');
+    secuenciaHumano = [];
     bloquearBotones();
     actualizarNivel();
 
     const numeroAleatorio = Math.floor(Math.random() * (colores.length));
     secuenciaMaquina.push(numeroAleatorio);
+    if(juegoActivo){
+        console.log('Secuencia de la maquina: ')  
+        console.log(secuenciaMaquina);
+        mostrarSecuencia();
+        bloquearBotones();
+    }
+
     const RETRASO_TURNO_JUGADOR = (secuenciaMaquina.length + 1) * 1000;
-
-    console.log(secuenciaMaquina);
-    mostrarSecuencia();
-
     setTimeout(() => {
         actualizarTurno('Turno del jugador');
         desbloquearBotones();
     }, RETRASO_TURNO_JUGADOR);
-
-    secuenciaHumano = [];
 };
 
 const mostrarSecuencia = function (){
@@ -63,51 +66,54 @@ const mostrarSecuencia = function (){
 
 const secuenciaJugador = function (){
     colores.forEach((color) => {
-        color.addEventListener('click', (event) => {
-            const colorSeleccionado = colores.indexOf(event.target);
+        color.onclick = () => { // Línea modificada
+            const colorSeleccionado = colores.indexOf(color); // Línea añadida
             color.classList.add('flash');
             setTimeout(() => {
                 color.classList.remove('flash');
             }, 500);
             secuenciaHumano.push(colorSeleccionado);
-        });
-    })
-};
-
-const compararSecuencia = function (){
-    for (let i = 0; i < secuenciaHumano.length; i++) {
-        if (secuenciaHumano[i] !== secuenciaMaquina[i]) {
-            alert("Perdiste!");
-            secuenciaHumano = [];
-            secuenciaMaquina = [];
-            nivel = 1;
-            $nivel.classList.add('oculto');
-            $botonIniciar.classList.remove('oculto');
-            return;
-        }
-     }
-    
-    if (secuenciaHumano.length === secuenciaMaquina.length) {
-        secuenciaHumano = [];
-        setTimeout(() => {
-            secuenciaRonda();
-        }, 500);
-    }
-};
-
-const bloquearBotones = function () {
-    $botonIniciar.classList.add('oculto');
-    $nivel.classList.remove('oculto');
-
-    colores.forEach((color) => {
-        color.onclick = function () {
-            console.log('estas bloqueado');
+            console.log('Secuencia del jugador: ')
+            console.log(secuenciaHumano);
+            verificarSecuencia(); // Línea añadida
         };
     });
 };
 
-const desbloquearBotones = function () {
+const verificarSecuencia = function () {
+    for (let i = 0; i < secuenciaHumano.length; i++) {
+        if (secuenciaHumano[i] !== secuenciaMaquina[i]) {
+            bloquearBotones();
+            actualizarTurno('Perdiste!');
+            secuenciaHumano = [];
+            secuenciaMaquina = [];
+            juegoActivo = false;
+            return;
+        }
+    }
+
+    if (secuenciaHumano.length === secuenciaMaquina.length) {
+        bloquearBotones();
+        secuenciaHumano = [];
+        setTimeout(secuenciaRonda, 1000);
+    }
 };
 
+const bloquearBotones = function () {
+    const cuadrados = document.querySelectorAll('.cuadrado');
+    cuadrados.forEach((cuadrado) => {
+        cuadrado.onclick = () => {};
+    });
+};
+
+const desbloquearBotones = function () {
+    const cuadrados = document.querySelectorAll('.cuadrado');
+    cuadrados.forEach((cuadrado) => {
+        cuadrado.onclick = () => {
+            secuenciaJugador(cuadrado);
+        }
+    });
+    secuenciaJugador();
+};
 
 $botonIniciar.addEventListener('click', iniciarJuego);
