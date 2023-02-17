@@ -11,7 +11,6 @@ const iniciarJuego = function() {
     nivel = 1;
     secuenciaRonda();
     secuenciaJugador();
-    interval = setInterval(compararSecuencia, 1000 * (secuenciaMaquina.length + 1) + 500);
 };
 
 let secuenciaHumano = [];
