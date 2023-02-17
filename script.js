@@ -10,12 +10,15 @@ let secuenciaHumano = [];
 let secuenciaMaquina = [];
 let nivel = 0;
 let juegoActivo = false;
+$botonIniciar.classList.remove('oculto');
 
 const iniciarJuego = function() {
     juegoActivo = true;
     secuenciaHumano = [];
     secuenciaMaquina = [];
     nivel = 1;
+    $nivel.classList.remove('oculto');
+    $botonIniciar.classList.add('oculto');
     secuenciaRonda();
     secuenciaJugador();
 };
@@ -30,7 +33,7 @@ const actualizarTurno = function (turno) {
 };
 
 const secuenciaRonda = function (){
-    actualizarTurno('Turno de la maquina');
+    actualizarTurno('Memoriza la secuencia');
     secuenciaHumano = [];
     bloquearBotones();
     actualizarNivel();
@@ -38,15 +41,13 @@ const secuenciaRonda = function (){
     const numeroAleatorio = Math.floor(Math.random() * (colores.length));
     secuenciaMaquina.push(numeroAleatorio);
     if(juegoActivo){
-        console.log('Secuencia de la maquina: ')  
-        console.log(secuenciaMaquina);
         mostrarSecuencia();
         bloquearBotones();
     }
 
     const RETRASO_TURNO_JUGADOR = (secuenciaMaquina.length + 1) * 1000;
     setTimeout(() => {
-        actualizarTurno('Turno del jugador');
+        actualizarTurno('Es tu turno');
         desbloquearBotones();
     }, RETRASO_TURNO_JUGADOR);
 };
@@ -73,21 +74,17 @@ const secuenciaJugador = function (){
                 color.classList.remove('flash');
             }, 500);
             secuenciaHumano.push(colorSeleccionado);
-            console.log('Secuencia del jugador: ')
-            console.log(secuenciaHumano);
-            verificarSecuencia(); // Línea añadida
+            compararSecuencias(); // Línea añadida
         };
     });
 };
 
-const verificarSecuencia = function () {
+const compararSecuencias = function () {
     for (let i = 0; i < secuenciaHumano.length; i++) {
         if (secuenciaHumano[i] !== secuenciaMaquina[i]) {
             bloquearBotones();
-            actualizarTurno('Perdiste!');
-            secuenciaHumano = [];
-            secuenciaMaquina = [];
-            juegoActivo = false;
+            actualizarTurno('¡Perdiste!');
+            perder();
             return;
         }
     }
@@ -97,6 +94,15 @@ const verificarSecuencia = function () {
         secuenciaHumano = [];
         setTimeout(secuenciaRonda, 1000);
     }
+};
+
+const perder = function () {
+    secuenciaHumano = [];
+    secuenciaMaquina = [];
+    juegoActivo = false;
+    $nivel.classList.add('oculto');
+    $botonIniciar.classList.remove('oculto');
+    $botonIniciar.innerText = 'Volver a jugar';
 };
 
 const bloquearBotones = function () {
