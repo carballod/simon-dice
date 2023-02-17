@@ -67,14 +67,14 @@ const mostrarSecuencia = function (){
 
 const secuenciaJugador = function (){
     colores.forEach((color) => {
-        color.onclick = () => {
+        color.onclick = () => { 
             const colorSeleccionado = colores.indexOf(color);
             color.classList.add('flash');
             setTimeout(() => {
                 color.classList.remove('flash');
             }, 500);
             secuenciaHumano.push(colorSeleccionado);
-            compararSecuencias(); 
+            compararSecuencias();
         };
     });
 };
